@@ -56,7 +56,7 @@ class App extends Component {
 		if (!this.word.includes(letter)) {
 			await this.setState({ lives: this.state.lives - 1 });
 			if (this.state.lives === 0) {
-				this.message = 'Oops! You ran out of lives!';
+				this.message = 'Oops! You ran out of lives! The word was ' + this.word;
 				this.setState({ modalOpen: true });
 			}
 		}
