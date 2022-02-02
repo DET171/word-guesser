@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Component } from 'react';
-import { Container, Header, Button } from 'semantic-ui-react';
+import { Container, Header, Button, Modal } from 'semantic-ui-react';
 import words from '../words.js';
 
 class App extends Component {
@@ -11,6 +11,7 @@ class App extends Component {
 		this.state = {
 			shown: this.shown.join(' '),
 			lives: 5,
+			modalOpen: false,
 			disabled: {
 				A: false,
 				B: false,
@@ -49,19 +50,26 @@ class App extends Component {
 		this.setState({ disabled: prevDisabled });
 	}
 
-	letterClicked(letter) {
-		this.disableLetter(letter);
+	async letterClicked(letter) {
+		if (letter === ' ') this.disableLetter('SPACE');
+		else this.disableLetter(letter);
+		if (!this.word.includes(letter)) {
+			await this.setState({ lives: this.state.lives - 1 });
+			if (this.state.lives === 0) {
+				this.message = 'Oops! You ran out of lives!';
+				this.setState({ modalOpen: true });
+			}
+		}
 		for (let i = 0; i < this.word.length; i++) {
 			let correct = this.word[i];
-			console.log(correct);
 			if (letter === correct) {
-				console.log(true);
 				if (correct === ' ') this.shown[i] = String.fromCharCode(160);
 				else this.shown[i] = letter;
-				this.setState({ shown: this.shown.join(' ') });
-			}
-			else {
-				console.log(false);
+				await this.setState({ shown: this.shown.join(' ') });
+				if (this.state.shown.replace(/\s/g, '') === this.word) {
+					this.message = 'Congratulations! You won!';
+					this.setState({ modalOpen: true });
+				}
 			}
 		}
 	}
@@ -69,6 +77,16 @@ class App extends Component {
 	render() {
 		return (
 			<Container>
+				<Modal open={this.state.modalOpen}>
+					<Modal.Content>
+						<Modal.Description>
+							{this.message}
+						</Modal.Description>
+					</Modal.Content>
+					<Modal.Actions>
+						<Button color='green' onClick={() => window.location.reload()}>Replay</Button>
+					</Modal.Actions>
+				</Modal>
 				<Header as='h1' className='centered'>Guess the enemy name (does not include Hidden Wave)</Header>
 				<p className='centered large'>{this.state.shown}</p>
 				<Header as='h4' className='lives'>Lives left: {this.state.lives}</Header>
