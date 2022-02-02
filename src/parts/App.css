@@ -1,0 +1,16 @@
+.centered {
+  text-align: center;
+}
+
+.large {
+  font-size: 2rem;
+}
+
+.btnContainer {
+  text-align: center;
+}
+
+.btnContainer > button {
+  margin: 5px !important;
+  padding: 20px 60px 20px 60px !important;
+}
