@@ -6,9 +6,11 @@ import words from '../words.js';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.word = words[Math.floor(Math.random() * words.length)];
+		this.word = words[Math.floor(Math.random() * words.length)].toUpperCase();
+		this.shown = new Array(this.word.length).fill('_');
 		this.state = {
-			shown: '_ '.repeat(this.word.length),
+			shown: this.shown.join(' '),
+			lives: 5,
 			disabled: {
 				A: false,
 				B: false,
@@ -36,22 +38,40 @@ class App extends Component {
 				X: false,
 				Y: false,
 				Z: false,
+				SPACE: false,
 			},
 		};
 	}
 	
-	letterClicked(letter) {
+	disableLetter(letter) {
 		const prevDisabled = this.state.disabled;
 		prevDisabled[letter] = true;
 		this.setState({ disabled: prevDisabled });
-		console.log(this.state.disabled);
+	}
+
+	letterClicked(letter) {
+		this.disableLetter(letter);
+		for (let i = 0; i < this.word.length; i++) {
+			let correct = this.word[i];
+			console.log(correct);
+			if (letter === correct) {
+				console.log(true);
+				if (correct === ' ') this.shown[i] = String.fromCharCode(160);
+				else this.shown[i] = letter;
+				this.setState({ shown: this.shown.join(' ') });
+			}
+			else {
+				console.log(false);
+			}
+		}
 	}
 
 	render() {
 		return (
 			<Container>
-				<Header as='h1' className='centered'>Guess the name</Header>
+				<Header as='h1' className='centered'>Guess the enemy name (does not include Hidden Wave)</Header>
 				<p className='centered large'>{this.state.shown}</p>
+				<Header as='h4' className='lives'>Lives left: {this.state.lives}</Header>
 				<div className='btnContainer'>
 					{/* Buttons here */}
 					<Button onClick={() => {this.letterClicked('A');}} disabled={this.state.disabled['A']}>A</Button>
@@ -80,6 +100,7 @@ class App extends Component {
 					<Button onClick={() => {this.letterClicked('X');}} disabled={this.state.disabled['X']}>X</Button>
 					<Button onClick={() => {this.letterClicked('Y');}} disabled={this.state.disabled['Y']}>Y</Button>
 					<Button onClick={() => {this.letterClicked('Z');}} disabled={this.state.disabled['Z']}>Z</Button>
+					<Button onClick={() => {this.letterClicked(' ');}} disabled={this.state.disabled['SPACE']}>[SPACE]</Button>
 				</div>
 			</Container>
 		);
