@@ -66,7 +66,7 @@ class App extends Component {
 				if (correct === ' ') this.shown[i] = String.fromCharCode(160);
 				else this.shown[i] = letter;
 				await this.setState({ shown: this.shown.join(' ') });
-				if (this.state.shown.replace(/\s/g, '') === this.word) {
+				if (this.state.shown.replace(/\s/g, '') === this.word.replace(/\s/g, '')) {
 					this.message = 'Congratulations! You won!';
 					this.setState({ modalOpen: true });
 				}
