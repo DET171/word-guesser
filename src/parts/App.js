@@ -74,6 +74,45 @@ class App extends Component {
 		}
 	}
 
+	resetGame() {
+		this.word = words[Math.floor(Math.random() * words.length)].toUpperCase();
+		this.shown = new Array(this.word.length).fill('_');
+		this.setState({
+			shown: this.shown.join(' '),
+			lives: 5,
+			modalOpen: false,
+			disabled: {
+				A: false,
+				B: false,
+				C: false,
+				D: false,
+				E: false,
+				F: false,
+				G: false,
+				H: false,
+				I: false,
+				J: false,
+				K: false,
+				L: false,
+				M: false,
+				N: false,
+				O: false,
+				P: false,
+				Q: false,
+				R: false,
+				S: false,
+				T: false,
+				U: false,
+				V: false,
+				W: false,
+				X: false,
+				Y: false,
+				Z: false,
+				SPACE: false,
+			},
+		});
+	}
+
 	render() {
 		return (
 			<Container>
@@ -84,7 +123,7 @@ class App extends Component {
 						</Modal.Description>
 					</Modal.Content>
 					<Modal.Actions>
-						<Button color='green' onClick={() => window.location.reload()}>Replay</Button>
+						<Button color='green' onClick={() => this.resetGame()}>Replay</Button>
 					</Modal.Actions>
 				</Modal>
 				<Header as='h1' className='centered'>Guess the enemy name (does not include Hidden Wave)</Header>
